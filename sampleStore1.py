@@ -93,3 +93,51 @@ br.bar_label(br.containers[2],fmt="%.2f")
 br.bar_label(br.containers[3],fmt="%.2f")
 plt.ylabel("Average Profit")
 plt.show()
+
+# 3 Evaluate the performance of different customer segments (Consumer, Corporate, Home Office) based on sales, quantity, and profit.
+
+segment=df_no_outlier.groupby("Segment")[["Sales","Profit","Quantity"]].sum().reset_index()
+plt.figure(figsize=(15,7))
+plt.subplot(1,3,1)
+sns.barplot(x="Segment",y="Sales",data=segment,palette='dark:orange')
+plt.grid(False)
+plt.xticks(rotation=45)
+plt.title("Segment by Sales")
+
+
+
+plt.subplot(1,3,2)
+sns.barplot(x="Segment",y="Quantity",data=segment,palette='dark:purple')
+plt.grid(False)
+plt.xticks(rotation=45)
+plt.title("Segment by Quantity")
+
+
+
+plt.subplot(1,3,3)
+sns.barplot(x="Segment",y="Profit",data=segment,palette='dark:blue')
+plt.grid(False)
+plt.xticks(rotation=45)
+plt.title("Segment by Profit")
+plt.suptitle("Segment-wise Customer Behavior")
+plt.show()
+
+
+
+
+# 4 identifying return frequency by category to assess business impact.
+
+def conv(val):
+    if(val=="Yes"):
+        return 1
+    else:
+        return 0
+
+df_no_outlier["returned_flag"]=df_no_outlier["Returned"].apply(conv)
+print(df_no_outlier)
+
+returnbase=df_no_outlier.groupby("Category")["returned_flag"].sum()
+plt.pie(returnbase.values,labels=returnbase.index,autopct="%.2f%%",colors = ["#A1C9F1", "#FFB5E8", "#B5EAD7"])
+plt.legend()
+plt.title("Distribution of return order by Category")
+plt.show()
