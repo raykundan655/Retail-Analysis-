@@ -141,3 +141,19 @@ plt.pie(returnbase.values,labels=returnbase.index,autopct="%.2f%%",colors = ["#A
 plt.legend()
 plt.title("Distribution of return order by Category")
 plt.show()
+
+# 5 Analyzing shipping time to understand delivery performance and customer experience.
+
+df_no_outlier["shipment_Duration"]=(df_no_outlier["Ship Date"] - df_no_outlier["Order Date"]).dt.days
+sns.histplot(x="shipment_Duration",data=df_no_outlier,bins=5,kde=True,color="#2ECC71")
+plt.grid(True)
+plt.title("Distribution of Shipping Duration")
+plt.show()
+
+
+
+corr=df_no_outlier.corr(numeric_only=True)
+sns.heatmap(corr,annot=True,cmap='coolwarm')
+plt.show()
+
+df_no_outlier.to_excel("clean-data.xlsx",index=False)
