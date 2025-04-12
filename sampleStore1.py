@@ -50,3 +50,46 @@ print(df_no_outlier)
 
 print(df_no_outlier.describe())
 
+#Objectives
+
+#1  Examine monthly-yearly  patterns in sales to identify peak periods and seasonal trends.
+
+
+df_no_outlier["Year"]=df_no_outlier["Order Date"].dt.year
+df_no_outlier["Month"]=df_no_outlier["Order Date"].dt.month_name()
+
+month_order = ['January', 'February', 'March', 'April', 'May', 'June',
+               'July', 'August', 'September', 'October', 'November', 'December']
+
+
+print(df_no_outlier)
+gb_month=df_no_outlier.groupby("Month")["Profit"].sum().reindex(month_order).reset_index()
+gb_year=df_no_outlier.groupby("Year")["Profit"].sum().reset_index()
+
+plt.figure(figsize=(10,6))
+sns.lineplot(x="Month",y="Profit",data=gb_month,color="m")
+plt.xticks(rotation=45)
+plt.title("Profit Trend Over Month")
+plt.grid(True)
+plt.show(block=False)
+plt.figure(figsize=(6,6))
+sns.lineplot(x="Year",y="Profit",data=gb_year,color="red")
+plt.title("Profit Trend Over Year")
+plt.grid(True)
+
+plt.show()
+
+
+#2 average profit across different regions to identify high and low-performing areas.
+
+
+region=df_no_outlier.groupby("Region")["Profit"].mean()
+br=sns.barplot(x=region.index,y=region.values,palette="YlGnBu")
+
+plt.title("Average Profit Across region")
+br.bar_label(br.containers[0],fmt="%.2f")
+br.bar_label(br.containers[1],fmt="%.2f")
+br.bar_label(br.containers[2],fmt="%.2f")
+br.bar_label(br.containers[3],fmt="%.2f")
+plt.ylabel("Average Profit")
+plt.show()
